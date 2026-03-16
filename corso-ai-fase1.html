@@ -676,6 +676,16 @@ body.light .fs-topbar, body.light .fs-footer { background: #eceef5 !important; }
 </style>
 </head>
 <body>
+<script>
+// Blocca qualsiasi window.print() automatico non intenzionale
+// L'unico print legittimo è quello del bottone topbar (onclick)
+const _origPrint = window.print.bind(window);
+let _printAllowed = false;
+window.print = function() {
+  if (_printAllowed) { _printAllowed = false; _origPrint(); }
+};
+function allowPrint() { _printAllowed = true; window.print(); }
+</script>
 
 <!-- LOADING SPLASH -->
 <div id="splash" style="position:fixed;inset:0;background:#0e1117;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .4s ease">
@@ -789,7 +799,7 @@ body.light .fs-topbar, body.light .fs-footer { background: #eceef5 !important; }
     <div style="display:flex;gap:8px">
       <div id="unlocked-badge" style="display:none;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--green);background:var(--greenl);border:1px solid rgba(62,207,142,.25);border-radius:6px;padding:4px 10px;font-family:var(--mono)">✓ LICENZA ATTIVA</div>
       <button class="tbtn" id="theme-btn" onclick="toggleTheme()" title="Cambia tema" aria-label="Cambia tema chiaro/scuro">☀︎</button>
-      <button class="tbtn" onclick="window.print()">Stampa / PDF</button>
+      <button class="tbtn" onclick="allowPrint()">Stampa / PDF</button>
       <button class="tbtn primary" onclick="goNext()">Avanti →</button>
     </div>
   </div>
@@ -1567,7 +1577,7 @@ for i, b in enumerate(batch):
         <div class="sv-topbar">
           <button class="sv-btn" id="sp4" onclick="sNavL(4,-1)" disabled>&#8592;</button>
           <div class="sv-dots" id="sdots4"></div>
-          <span class="sv-label" id="scnt4">Slide 1 di 4</span>
+          <span class="sv-label" id="scnt4">Slide 1 di 5</span>
           <button class="sv-btn" id="sn4" onclick="sNavL(4,1)">&#8594;</button>
           <button class="sv-btn" onclick="openFsL(4)" title="Schermo intero">&#x26F6;</button>
         </div>
@@ -2534,7 +2544,7 @@ print(f'Accuracy:  {accuracy:.3f}')"></textarea>
   <div class="fs-topbar">
     <button class="sv-btn" id="fs-sp" onclick="fsNav(-1)" disabled>&#8592;</button>
     <div class="sv-dots" id="fs-dots"></div>
-    <span class="sv-label" id="fs-cnt">Slide 1 di 8</span>
+    <span class="sv-label" id="fs-cnt">Slide 1 di 5</span>
     <button class="sv-btn" id="fs-sn" onclick="fsNav(1)">&#8594;</button>
     <button class="fs-close" onclick="closeFullscreen()" title="Chiudi (Esc)">&#x2715;</button>
   </div>
