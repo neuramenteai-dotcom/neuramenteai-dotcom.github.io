@@ -4110,7 +4110,7 @@ body{width:297mm;height:210mm;background:#0d1117;color:#dde3f0;font-family:'Inte
 <div style="margin-top:4mm;font-size:7px;color:rgba(150,160,190,.5);text-align:center">
 © 2026 Neuramente · Licenza uso personale · Vietata la copia, redistribuzione o rivendita senza autorizzazione scritta
 </div>
-<script>window.onload=()=>{window.print();}</script>
+<script>window.onload=()=>{window.print();}<\/script>
 </body></html>`;
   const blob = new Blob([html],{type:'text/html'});
   const url = URL.createObjectURL(blob);
@@ -4184,10 +4184,6 @@ function checkReturningUser() {
   document.body.appendChild(overlay);
   overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
 }
-/* fadeIn already defined */
- { from{opacity:0} to{opacity:1} }
-
-
 // ─── CHEAT SHEET GENERATOR ───
 function openCheatSheet() {
   const html = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">
@@ -4332,7 +4328,7 @@ h1{font-size:16pt;font-weight:700;color:#1a1d2e;margin-bottom:2px}
   Prossima fase → scikit-learn · XGBoost · MLflow · FastAPI · Docker
 </div>
 </div>
-<script>window.onload=()=>window.print();</script>
+<script>window.onload=()=>window.print();<\/script>
 </body></html>`;
   const blob = new Blob([html],{type:'text/html'});
   window.open(URL.createObjectURL(blob),'_blank');
@@ -4433,8 +4429,7 @@ function updatePaywalls() {
 
 // Inserimento chiave licenza
 function enterLicenseKey() {
-  const key = prompt('Inserisci la tua chiave di licenza Neuramente AI Pro:
-(formato: AIPRO-XXXX-XXXX-XXXX)', '');
+  const key = prompt('Inserisci la tua chiave licenza\n(formato: AIPRO-XXXX-XXXX-XXXX)', '');
   if (!key) return;
   const clean = key.trim().toUpperCase();
   if (/^AIPRO-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(clean)) {
