@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Neuramente · AI Pro — Impara l'AI in italiano</title>
-<meta name="description" content="Il percorso AI professionale in italiano. Da zero a ML in 9 lezioni. Gratis. Funziona offline. Nessun login.">
-<meta property="og:title" content="Neuramente AI Pro — Corso AI gratuito in italiano">
-<meta property="og:description" content="9 lezioni interattive · 27 esercizi pratici · Certificato incluso · Funziona offline">
+<title id="meta-title">Neuramente · AI Pro — Impara l'AI in italiano</title>
+<meta id="meta-desc" name="description" content="Il percorso AI professionale in italiano. Da zero a ML in 9 lezioni. Gratis. Funziona offline. Nessun login.">
+<meta id="og-title" property="og:title" content="Neuramente AI Pro — Corso AI gratuito in italiano">
+<meta id="og-desc" property="og:description" content="9 lezioni interattive · 27 esercizi pratici · Certificato incluso · Funziona offline">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230e1117'/><circle cx='16' cy='14' r='5' fill='%233ecf8e'/><circle cx='16' cy='14' r='2' fill='%230e1117' opacity='.5'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -33,8 +33,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;ali
 .nav-logo-text{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--text)}
 .nav-logo-text em{color:var(--green);font-style:normal}
 .nav-badge{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px;background:var(--accentl);color:var(--accent);border:1px solid rgba(91,141,238,.25)}
+.nav-right{display:flex;align-items:center;gap:10px}
 .nav-cta{padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);text-decoration:none;transition:opacity .15s}
 .nav-cta:hover{opacity:.85}
+
+/* Language toggle */
+.lang-toggle{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;height:30px}
+.lang-btn{padding:0 10px;font-size:11px;font-weight:600;font-family:var(--mono);cursor:pointer;background:transparent;border:none;color:var(--muted);height:100%;transition:all .15s;letter-spacing:.05em}
+.lang-btn.active{background:var(--accent);color:#fff}
+.lang-btn:hover:not(.active){color:var(--text)}
 
 /* ── HERO ── */
 .hero{min-height:100vh;display:flex;align-items:center;padding:100px 5vw 80px;position:relative;overflow:hidden}
@@ -142,6 +149,7 @@ footer a{color:var(--hint);text-decoration:none}
   .proof-grid{grid-template-columns:1fr}
   .cta-section{padding:40px 24px}
   nav{padding:0 16px}
+  .lang-toggle{display:none}
 }
 </style>
 </head>
@@ -173,7 +181,13 @@ footer a{color:var(--hint);text-decoration:none}
     <span class="nav-logo-text">Neur<em>a</em>mente</span>
     <span class="nav-badge">AI PRO</span>
   </div>
-  <a href="#optin" class="nav-cta">Inizia gratis →</a>
+  <div class="nav-right">
+    <div class="lang-toggle" role="group" aria-label="Language selector">
+      <button class="lang-btn active" id="btn-it" onclick="setLang('it')" aria-label="Italiano">IT</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')" aria-label="English">EN</button>
+    </div>
+    <a href="#optin" class="nav-cta" id="nav-cta-text">Inizia gratis →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -185,27 +199,27 @@ footer a{color:var(--hint);text-decoration:none}
 
       <div class="hero-left">
         <div class="hero-eyebrow">Neuramente · AI Pro · 2026</div>
-        <h1 class="hero-title">Impara l'AI<br>in <em>italiano</em>,<br>da zero.</h1>
-        <p class="hero-lead">9 lezioni interattive su Python, NumPy, Pandas, algebra lineare, gradient descent, probabilità e statistica ML. Un file HTML che funziona offline, senza login, gratis.</p>
+        <h1 class="hero-title" id="hero-title">Impara l'AI<br>in <em>italiano</em>,<br>da zero.</h1>
+        <p class="hero-lead" id="hero-lead">9 lezioni interattive su Python, NumPy, Pandas, algebra lineare, gradient descent, probabilità e statistica ML. Un file HTML che funziona offline, senza login, gratis.</p>
         <div class="hero-pills">
-          <span class="pill green">✓ Gratis</span>
-          <span class="pill green">✓ Offline</span>
-          <span class="pill blue">9 lezioni</span>
-          <span class="pill blue">27 esercizi</span>
-          <span class="pill">Certificato incluso</span>
-          <span class="pill">Nessun login</span>
+          <span class="pill green" id="pill-free">✓ Gratis</span>
+          <span class="pill green" id="pill-offline">✓ Offline</span>
+          <span class="pill blue" id="pill-lessons">9 lezioni</span>
+          <span class="pill blue" id="pill-exercises">27 esercizi</span>
+          <span class="pill" id="pill-cert">Certificato incluso</span>
+          <span class="pill" id="pill-nologin">Nessun login</span>
         </div>
 
         <!-- DUAL CTA -->
         <div style="display:flex;flex-direction:column;gap:12px" id="optin">
-          <a href="corso-ai-fase1.html" class="download-btn" style="text-align:center">▶ Inizia AI Pro — Lezione 1 gratis</a>
-          <div style="font-size:12px;color:var(--muted);text-align:center">oppure iscriviti per ricevere la Fase 2 quando esce</div>
-          <form class="optin" action="https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0" method="POST" target="_blank">
+          <a href="corso-ai-fase1.html" class="download-btn" style="text-align:center" id="cta-start">▶ Inizia AI Pro — Lezione 1 gratis</a>
+          <div style="font-size:12px;color:var(--muted);text-align:center" id="cta-or-sub">oppure iscriviti per ricevere la Fase 2 quando esce</div>
+          <form class="optin" action="https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0" method="POST" target="_blank" onsubmit="handleOptinSubmit(event,'optin-success')">
             <input type="email" name="EMAIL" id="email-input" placeholder="la-tua-email@gmail.com" required>
-            <button class="optin-btn" type="submit">Avvisami →</button>
+            <button class="optin-btn" type="submit" id="optin-btn-text">Avvisami →</button>
           </form>
           <div class="optin-success" id="optin-success">✓ Perfetto! Ti avviseremo quando esce la Fase 2 con accesso early bird.</div>
-          <div class="optin-sub">Nessuno spam. Solo la notifica di lancio della Fase 2. Cancellazione in un click.</div>
+          <div class="optin-sub" id="optin-sub-text">Nessuno spam. Solo la notifica di lancio della Fase 2. Cancellazione in un click.</div>
         </div>
       </div>
 
@@ -226,9 +240,9 @@ footer a{color:var(--hint);text-decoration:none}
               <div class="mdot a"></div>
               <div class="mdot"></div><div class="mdot"></div><div class="mdot"></div><div class="mdot"></div><div class="mdot"></div>
             </div>
-            <div class="mockup-eyebrow">Lezione 3 · Algebra Lineare</div>
-            <div class="mockup-heading">Cosine Similarity —<br>come GPT capisce le parole</div>
-            <p class="mockup-para">Nei modelli linguistici, ogni parola è un vettore. La <span style="color:var(--accent)">cosine similarity</span> misura quanto due vettori puntano nella stessa direzione...</p>
+            <div class="mockup-eyebrow" id="mockup-eyebrow">Lezione 3 · Algebra Lineare</div>
+            <div class="mockup-heading" id="mockup-heading">Cosine Similarity —<br>come GPT capisce le parole</div>
+            <p class="mockup-para" id="mockup-para">Nei modelli linguistici, ogni parola è un vettore. La <span style="color:var(--accent)">cosine similarity</span> misura quanto due vettori puntano nella stessa direzione...</p>
             <div class="mockup-code">
               <span style="color:#4a5568"># distanza tra embeddings</span><br>
               <span style="color:#81a1c1">def</span> <span style="color:#88c0d0">cos_sim</span>(a, b):<br>
@@ -237,9 +251,9 @@ footer a{color:var(--hint);text-decoration:none}
               <span style="color:#4a5568"># → 0.994 (re ≈ regina)</span>
             </div>
             <div class="mockup-stats">
-              <div class="mstat"><div class="mstat-n" style="color:var(--accent)">3/9</div><div class="mstat-l">lezioni</div></div>
-              <div class="mstat"><div class="mstat-n" style="color:var(--green)">9/27</div><div class="mstat-l">esercizi</div></div>
-              <div class="mstat"><div class="mstat-n" style="color:var(--amber)">44%</div><div class="mstat-l">progresso</div></div>
+              <div class="mstat"><div class="mstat-n" style="color:var(--accent)">3/9</div><div class="mstat-l" id="mockup-stat-lessons">lezioni</div></div>
+              <div class="mstat"><div class="mstat-n" style="color:var(--green)">9/27</div><div class="mstat-l" id="mockup-stat-exercises">esercizi</div></div>
+              <div class="mstat"><div class="mstat-n" style="color:var(--amber)">44%</div><div class="mstat-l" id="mockup-stat-progress">progresso</div></div>
             </div>
           </div>
         </div>
@@ -251,39 +265,39 @@ footer a{color:var(--hint);text-decoration:none}
 
 <!-- FEATURES -->
 <div class="section">
-  <div class="sec-eyebrow">Perché è diverso</div>
-  <h2 class="sec-heading">Non un video. Non un PDF.<br>Un ambiente di apprendimento.</h2>
-  <p class="sec-sub">Ogni lezione ha slide navigabili, esercizi con feedback immediato, quiz e un viewer fullscreen. Il progresso viene salvato automaticamente.</p>
+  <div class="sec-eyebrow" id="feat-eyebrow">Perché è diverso</div>
+  <h2 class="sec-heading" id="feat-heading">Non un video. Non un PDF.<br>Un ambiente di apprendimento.</h2>
+  <p class="sec-sub" id="feat-sub">Ogni lezione ha slide navigabili, esercizi con feedback immediato, quiz e un viewer fullscreen. Il progresso viene salvato automaticamente.</p>
   <div class="feat-grid">
     <div class="feat-card">
       <div class="feat-icon">🎯</div>
-      <div class="feat-title">Esercizi con feedback immediato</div>
-      <div class="feat-desc">27 esercizi pratici che validano il tuo codice e spiegano cosa hai sbagliato — o perché hai fatto bene. Non devi aspettare un correttore umano.</div>
+      <div class="feat-title" id="feat1-title">Esercizi con feedback immediato</div>
+      <div class="feat-desc" id="feat1-desc">27 esercizi pratici che validano il tuo codice e spiegano cosa hai sbagliato — o perché hai fatto bene. Non devi aspettare un correttore umano.</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">📱</div>
-      <div class="feat-title">Funziona offline</div>
-      <div class="feat-desc">Un singolo file HTML da 300KB. Nessun server, nessun login, nessuna connessione richiesta. Funziona su treno, aereo, campus senza wifi.</div>
+      <div class="feat-title" id="feat2-title">Funziona offline</div>
+      <div class="feat-desc" id="feat2-desc">Un singolo file HTML da 300KB. Nessun server, nessun login, nessuna connessione richiesta. Funziona su treno, aereo, campus senza wifi.</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">🏆</div>
-      <div class="feat-title">Certificato scaricabile</div>
-      <div class="feat-desc">Al completamento della Fase 1 puoi generare e scaricare il tuo attestato Neuramente AI Pro in PDF. Con ID univoco e link per LinkedIn.</div>
+      <div class="feat-title" id="feat3-title">Certificato scaricabile</div>
+      <div class="feat-desc" id="feat3-desc">Al completamento della Fase 1 puoi generare e scaricare il tuo attestato Neuramente AI Pro in PDF. Con ID univoco e link per LinkedIn.</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">🌙</div>
-      <div class="feat-title">Tema chiaro e scuro</div>
-      <div class="feat-desc">Studia di sera in modalità scura, di giorno in modalità chiara. Il tema viene ricordato tra le sessioni.</div>
+      <div class="feat-title" id="feat4-title">Tema chiaro e scuro</div>
+      <div class="feat-desc" id="feat4-desc">Studia di sera in modalità scura, di giorno in modalità chiara. Il tema viene ricordato tra le sessioni.</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">📊</div>
-      <div class="feat-title">Tracking del progresso</div>
-      <div class="feat-desc">Il corso ricorda dove sei arrivato. Alla riapertura ti mostra quante lezioni hai completato e ti riporta all'ultima posizione.</div>
+      <div class="feat-title" id="feat5-title">Tracking del progresso</div>
+      <div class="feat-desc" id="feat5-desc">Il corso ricorda dove sei arrivato. Alla riapertura ti mostra quante lezioni hai completato e ti riporta all'ultima posizione.</div>
     </div>
     <div class="feat-card">
       <div class="feat-icon">🖥️</div>
-      <div class="feat-title">Slide in fullscreen</div>
-      <div class="feat-desc">Ogni lezione ha un viewer di slide navigabili con modalità fullscreen. Studia come in un'aula vera, con tastiera (←→) e navigazione visuale.</div>
+      <div class="feat-title" id="feat6-title">Slide in fullscreen</div>
+      <div class="feat-desc" id="feat6-desc">Ogni lezione ha un viewer di slide navigabili con modalità fullscreen. Studia come in un'aula vera, con tastiera (←→) e navigazione visuale.</div>
     </div>
   </div>
 </div>
@@ -291,140 +305,350 @@ footer a{color:var(--hint);text-decoration:none}
 <!-- CURRICULUM -->
 <div style="background:var(--bg2);padding:80px 0">
   <div class="section" style="padding-top:0;padding-bottom:0">
-    <div class="sec-eyebrow">Il programma</div>
-    <h2 class="sec-heading">9 lezioni. 2 moduli.<br>Zero prerequisiti.</h2>
-    <p class="sec-sub">La stessa progressione di Stanford CS229 e fast.ai, adattata per chi parte da zero. Ogni concetto è spiegato con analogie concrete prima di mostrare il codice.</p>
+    <div class="sec-eyebrow" id="curr-eyebrow">Il programma</div>
+    <h2 class="sec-heading" id="curr-heading">9 lezioni. 2 moduli.<br>Zero prerequisiti.</h2>
+    <p class="sec-sub" id="curr-sub">La stessa progressione di Stanford CS229 e fast.ai, adattata per chi parte da zero. Ogni concetto è spiegato con analogie concrete prima di mostrare il codice.</p>
     <div class="curriculum">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);padding:6px 20px;margin-bottom:4px">MODULO 1 · PYTHON PER IL ML</div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);padding:6px 20px;margin-bottom:4px" id="mod1-label">MODULO 1 · PYTHON PER IL ML</div>
       <div class="lesson-row">
         <div class="lesson-num">01</div>
-        <div class="lesson-body"><div class="lesson-title">Variabili e tipi di dato</div><div class="lesson-desc">Come Python pensa ai dati. Variabili, int, float, str, bool, liste, dizionari.</div></div>
-        <div <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l1-title">Variabili e tipi di dato</div><div class="lesson-desc" id="l1-desc">Come Python pensa ai dati. Variabili, int, float, str, bool, liste, dizionari.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l1-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num">02</div>
-        <div class="lesson-body"><div class="lesson-title">Funzioni e cicli</div><div class="lesson-desc">def, return, for, range, enumerate, list comprehension. La struttura dei training loop.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l2-title">Funzioni e cicli</div><div class="lesson-desc" id="l2-desc">def, return, for, range, enumerate, list comprehension. La struttura dei training loop.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l2-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num">03</div>
-        <div class="lesson-body"><div class="lesson-title">Liste e dizionari avanzati</div><div class="lesson-desc">Slice, filtraggio, sorted con lambda. Il preprocessing quotidiano di ogni data scientist.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l3-title">Liste e dizionari avanzati</div><div class="lesson-desc" id="l3-desc">Slice, filtraggio, sorted con lambda. Il preprocessing quotidiano di ogni data scientist.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l3-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num">04</div>
-        <div class="lesson-body"><div class="lesson-title">NumPy — calcolo numerico veloce</div><div class="lesson-desc">Array, operazioni vettorizzate, shape, reshape, prodotto matriciale. 100x più veloce di Python puro.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l4-title">NumPy — calcolo numerico veloce</div><div class="lesson-desc" id="l4-desc">Array, operazioni vettorizzate, shape, reshape, prodotto matriciale. 100x più veloce di Python puro.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l4-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num">05</div>
-        <div class="lesson-body"><div class="lesson-title">Pandas — analisi di dataset reali</div><div class="lesson-desc">DataFrame, boolean indexing, NaN, feature engineering. Il foglio Excel programmabile.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l5-title">Pandas — analisi di dataset reali</div><div class="lesson-desc" id="l5-desc">DataFrame, boolean indexing, NaN, feature engineering. Il foglio Excel programmabile.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l5-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);padding:6px 20px;margin-top:10px;margin-bottom:4px">MODULO 2 · MATEMATICA PER L'AI</div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);padding:6px 20px;margin-top:10px;margin-bottom:4px" id="mod2-label">MODULO 2 · MATEMATICA PER L'AI</div>
       <div class="lesson-row">
         <div class="lesson-num mod2">06</div>
-        <div class="lesson-body"><div class="lesson-title">Algebra lineare</div><div class="lesson-desc">Vettori, matrici, prodotto scalare, cosine similarity. Il linguaggio con cui parlano le reti neurali.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l6-title">Algebra lineare</div><div class="lesson-desc" id="l6-desc">Vettori, matrici, prodotto scalare, cosine similarity. Il linguaggio con cui parlano le reti neurali.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l6-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num mod2">07</div>
-        <div class="lesson-body"><div class="lesson-title">Calcolo e gradient descent</div><div class="lesson-desc">Derivate, pendenza, l'algoritmo con cui le reti neurali imparano. Learning rate e convergenza.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l7-title">Calcolo e gradient descent</div><div class="lesson-desc" id="l7-desc">Derivate, pendenza, l'algoritmo con cui le reti neurali imparano. Learning rate e convergenza.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l7-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num mod2">08</div>
-        <div class="lesson-body"><div class="lesson-title">Probabilità e teorema di Bayes</div><div class="lesson-desc">Prior, posterior, distribuzione normale, softmax. Come i classificatori pensano in termini di probabilità.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l8-title">Probabilità e teorema di Bayes</div><div class="lesson-desc" id="l8-desc">Prior, posterior, distribuzione normale, softmax. Come i classificatori pensano in termini di probabilità.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l8-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
       <div class="lesson-row">
         <div class="lesson-num mod2">09</div>
-        <div class="lesson-body"><div class="lesson-title">Statistica per ML</div><div class="lesson-desc">Overfitting, underfitting, cross-validation, precision, recall, F1. Come si valuta davvero un modello.</div></div>
-        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag">3 esercizi</span><span class="ltag">4 quiz</span></div>
+        <div class="lesson-body"><div class="lesson-title" id="l9-title">Statistica per ML</div><div class="lesson-desc" id="l9-desc">Overfitting, underfitting, cross-validation, precision, recall, F1. Come si valuta davvero un modello.</div></div>
+        <div class="lesson-tags"><span class="ltag">5 slide</span><span class="ltag" id="l9-ex">3 esercizi</span><span class="ltag">4 quiz</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SOCIAL PROOF placeholder -->
+<!-- SOCIAL PROOF -->
 <div class="section">
-  <div class="sec-eyebrow">Cosa dicono</div>
-  <h2 class="sec-heading">I primi studenti</h2>
-  <p class="sec-sub">Aggiungi qui le testimonianze reali dopo le prime settimane di distribuzione. Chiedi feedback agli utenti via email o nei commenti LinkedIn.</p>
+  <div class="sec-eyebrow" id="proof-eyebrow">Cosa dicono</div>
+  <h2 class="sec-heading" id="proof-heading">I primi studenti</h2>
+  <p class="sec-sub" id="proof-sub">Aggiungi qui le testimonianze reali dopo le prime settimane di distribuzione. Chiedi feedback agli utenti via email o nei commenti LinkedIn.</p>
   <div class="proof-grid">
     <div class="proof-card">
-      <div class="proof-text">"Finalmente un corso AI in italiano che spiega il perché prima del come. Gli esercizi con feedback istantaneo cambiano tutto rispetto ai soliti video."</div>
-      <div class="proof-author"><div class="proof-avatar">MR</div><div><div class="proof-name">Mario R.</div><div class="proof-role">Sviluppatore backend — Milano</div></div></div>
+      <div class="proof-text" id="proof1">"Finalmente un corso AI in italiano che spiega il perché prima del come. Gli esercizi con feedback istantaneo cambiano tutto rispetto ai soliti video."</div>
+      <div class="proof-author"><div class="proof-avatar">MR</div><div><div class="proof-name">Mario R.</div><div class="proof-role" id="proof1-role">Sviluppatore backend — Milano</div></div></div>
     </div>
     <div class="proof-card">
-      <div class="proof-text">"Il fatto che funzioni offline l'ho usato in treno per una settimana intera. A fine mese avevo finito tutte e 9 le lezioni senza mai aprire YouTube."</div>
-      <div class="proof-author"><div class="proof-avatar">SC</div><div><div class="proof-name">Sara C.</div><div class="proof-role">Studente magistrale — Bologna</div></div></div>
+      <div class="proof-text" id="proof2">"Il fatto che funzioni offline l'ho usato in treno per una settimana intera. A fine mese avevo finito tutte e 9 le lezioni senza mai aprire YouTube."</div>
+      <div class="proof-author"><div class="proof-avatar">SC</div><div><div class="proof-name">Sara C.</div><div class="proof-role" id="proof2-role">Studente magistrale — Bologna</div></div></div>
     </div>
     <div class="proof-card">
-      <div class="proof-text">"Gradient descent spiegato con l'analogia della montagna nella nebbia — in 5 anni di corsi online non l'avevo mai capito davvero fino a questa lezione."</div>
-      <div class="proof-author"><div class="proof-avatar">LF</div><div><div class="proof-name">Lorenzo F.</div><div class="proof-role">Data analyst — Roma</div></div></div>
+      <div class="proof-text" id="proof3">"Gradient descent spiegato con l'analogia della montagna nella nebbia — in 5 anni di corsi online non l'avevo mai capito davvero fino a questa lezione."</div>
+      <div class="proof-author"><div class="proof-avatar">LF</div><div><div class="proof-name">Lorenzo F.</div><div class="proof-role" id="proof3-role">Data analyst — Roma</div></div></div>
     </div>
   </div>
-  <div style="margin-top:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted)">
+  <div style="margin-top:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted)" id="proof-notice">
     ⚠️ Queste sono testimonianze placeholder. Sostituiscile con feedback reali entro 2 settimane dal lancio. Chiedi esplicitamente ai tuoi utenti via email o LinkedIn.
   </div>
 </div>
 
 <!-- CTA FINALE -->
 <div class="cta-section">
-  <div class="sec-eyebrow" style="justify-content:center">Inizia adesso</div>
-  <h2 class="cta-title">Un file. Zero login.<br>Gratis per sempre.</h2>
-  <p class="cta-sub">Scarica la Fase 1 adesso, oppure iscriviti alla lista per ricevere la Fase 2 (ML classico con scikit-learn e XGBoost) con accesso early bird.</p>
+  <div class="sec-eyebrow" style="justify-content:center" id="cta-eyebrow">Inizia adesso</div>
+  <h2 class="cta-title" id="cta-title">Un file. Zero login.<br>Gratis per sempre.</h2>
+  <p class="cta-sub" id="cta-sub">Scarica la Fase 1 adesso, oppure iscriviti alla lista per ricevere la Fase 2 (ML classico con scikit-learn e XGBoost) con accesso early bird.</p>
   <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
-    <a href="corso-ai-fase1.html" class="download-btn">▶ Inizia AI Pro — Lezione 1 gratis</a>
-        <a href="https://neuramente-ai.lemonsqueezy.com/checkout/buy/903181c7-b516-4b37-bb0a-785df29db81c?discount=Y3OTA4OA" target="_blank" class="download-btn" style="background:var(--accent);color:#fff;margin-top:8px">🔓 Sblocca AI Pro completo — €29 early bird</a>
-    <div style="font-size:12px;color:var(--muted)">oppure</div>
-    <form class="cta-form" action="https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0" method="POST" target="_blank">
+    <a href="corso-ai-fase1.html" class="download-btn" id="cta-start2">▶ Inizia AI Pro — Lezione 1 gratis</a>
+    <a href="https://neuramente-ai.lemonsqueezy.com/checkout/buy/903181c7-b516-4b37-bb0a-785df29db81c?discount=Y3OTA4OA" target="_blank" class="download-btn" style="background:var(--accent);color:#fff;margin-top:8px" id="cta-unlock">🔓 Sblocca AI Pro completo — €29 early bird</a>
+    <div style="font-size:12px;color:var(--muted)" id="cta-or">oppure</div>
+    <form class="cta-form" action="https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0" method="POST" target="_blank" onsubmit="handleOptinSubmit(event,'optin-success-2')">
       <input type="email" name="EMAIL" id="email-input-2" placeholder="la-tua-email@gmail.com" required>
-    <button class="optin-btn" type="submit">Fase 2 in early bird →</button>
+      <button class="optin-btn" type="submit" id="cta-phase2-btn">Fase 2 in early bird →</button>
     </form>
     <div id="optin-success-2" class="optin-success" style="display:none;text-align:center">✓ Iscritto! Ti avviseremo per la Fase 2.</div>
-    <div style="font-size:11px;color:var(--muted)">Nessuno spam · Cancellazione in un click · © 2026 Neuramente</div>
+    <div style="font-size:11px;color:var(--muted)" id="cta-legal">Nessuno spam · Cancellazione in un click · © 2026 Neuramente</div>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
   <div style="margin-bottom:8px">
-    <strong style="color:var(--hint)">Neuramente · AI Pro</strong> — Percorso professionale in intelligenza artificiale in italiano
+    <strong style="color:var(--hint)">Neuramente · AI Pro</strong> — <span id="footer-desc">Percorso professionale in intelligenza artificiale in italiano</span>
   </div>
   <div>
-    © 2026 Neuramente · Uso personale · Vietata la redistribuzione ·
-    <a href="/cdn-cgi/l/email-protection#95fcfbf3fad5fbf0e0e7f4f8f0fbe1f0bbfce1"><span class="__cf_email__" data-cfemail="a1c8cfc7cee1cfc4d4d3c0ccc4cfd5c48fc8d5">[email&#160;protected]</span></a>
+    © 2026 Neuramente · <span id="footer-legal">Uso personale · Vietata la redistribuzione</span> ·
+    <a href="mailto:info@neuramente.ai">info@neuramente.ai</a>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ─── Opt-in handler (collega a Mailchimp o simile) ───
-const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0';
-  form.target = '_blank';
-  const inp = document.createElement('input');
-  inp.type = 'hidden'; inp.name = 'EMAIL'; inp.value = email;
-  form.appendChild(inp);
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-  document.querySelector('.optin').style.display = 'none';
-  document.getElementById('optin-success').style.display = 'block';
+<script>
+// ─── TRANSLATIONS ───────────────────────────────────────────────────────────
+const translations = {
+  it: {
+    // Meta
+    'meta-title': 'Neuramente · AI Pro — Impara l\'AI in italiano',
+    'meta-desc': 'Il percorso AI professionale in italiano. Da zero a ML in 9 lezioni. Gratis. Funziona offline. Nessun login.',
+    // Nav
+    'nav-cta-text': 'Inizia gratis →',
+    // Hero
+    'hero-title': 'Impara l\'AI<br>in <em>italiano</em>,<br>da zero.',
+    'hero-lead': '9 lezioni interattive su Python, NumPy, Pandas, algebra lineare, gradient descent, probabilità e statistica ML. Un file HTML che funziona offline, senza login, gratis.',
+    'pill-free': '✓ Gratis',
+    'pill-offline': '✓ Offline',
+    'pill-lessons': '9 lezioni',
+    'pill-exercises': '27 esercizi',
+    'pill-cert': 'Certificato incluso',
+    'pill-nologin': 'Nessun login',
+    'cta-start': '▶ Inizia AI Pro — Lezione 1 gratis',
+    'cta-or-sub': 'oppure iscriviti per ricevere la Fase 2 quando esce',
+    'optin-btn-text': 'Avvisami →',
+    'optin-sub-text': 'Nessuno spam. Solo la notifica di lancio della Fase 2. Cancellazione in un click.',
+    'optin-success': '✓ Perfetto! Ti avviseremo quando esce la Fase 2 con accesso early bird.',
+    // Mockup
+    'mockup-eyebrow': 'Lezione 3 · Algebra Lineare',
+    'mockup-heading': 'Cosine Similarity —<br>come GPT capisce le parole',
+    'mockup-para': 'Nei modelli linguistici, ogni parola è un vettore. La <span style="color:var(--accent)">cosine similarity</span> misura quanto due vettori puntano nella stessa direzione...',
+    'mockup-stat-lessons': 'lezioni',
+    'mockup-stat-exercises': 'esercizi',
+    'mockup-stat-progress': 'progresso',
+    // Features
+    'feat-eyebrow': 'Perché è diverso',
+    'feat-heading': 'Non un video. Non un PDF.<br>Un ambiente di apprendimento.',
+    'feat-sub': 'Ogni lezione ha slide navigabili, esercizi con feedback immediato, quiz e un viewer fullscreen. Il progresso viene salvato automaticamente.',
+    'feat1-title': 'Esercizi con feedback immediato',
+    'feat1-desc': '27 esercizi pratici che validano il tuo codice e spiegano cosa hai sbagliato — o perché hai fatto bene. Non devi aspettare un correttore umano.',
+    'feat2-title': 'Funziona offline',
+    'feat2-desc': 'Un singolo file HTML da 300KB. Nessun server, nessun login, nessuna connessione richiesta. Funziona su treno, aereo, campus senza wifi.',
+    'feat3-title': 'Certificato scaricabile',
+    'feat3-desc': 'Al completamento della Fase 1 puoi generare e scaricare il tuo attestato Neuramente AI Pro in PDF. Con ID univoco e link per LinkedIn.',
+    'feat4-title': 'Tema chiaro e scuro',
+    'feat4-desc': 'Studia di sera in modalità scura, di giorno in modalità chiara. Il tema viene ricordato tra le sessioni.',
+    'feat5-title': 'Tracking del progresso',
+    'feat5-desc': 'Il corso ricorda dove sei arrivato. Alla riapertura ti mostra quante lezioni hai completato e ti riporta all\'ultima posizione.',
+    'feat6-title': 'Slide in fullscreen',
+    'feat6-desc': 'Ogni lezione ha un viewer di slide navigabili con modalità fullscreen. Studia come in un\'aula vera, con tastiera (←→) e navigazione visuale.',
+    // Curriculum
+    'curr-eyebrow': 'Il programma',
+    'curr-heading': '9 lezioni. 2 moduli.<br>Zero prerequisiti.',
+    'curr-sub': 'La stessa progressione di Stanford CS229 e fast.ai, adattata per chi parte da zero. Ogni concetto è spiegato con analogie concrete prima di mostrare il codice.',
+    'mod1-label': 'MODULO 1 · PYTHON PER IL ML',
+    'mod2-label': 'MODULO 2 · MATEMATICA PER L\'AI',
+    'l1-title': 'Variabili e tipi di dato', 'l1-desc': 'Come Python pensa ai dati. Variabili, int, float, str, bool, liste, dizionari.', 'l1-ex': '3 esercizi',
+    'l2-title': 'Funzioni e cicli', 'l2-desc': 'def, return, for, range, enumerate, list comprehension. La struttura dei training loop.', 'l2-ex': '3 esercizi',
+    'l3-title': 'Liste e dizionari avanzati', 'l3-desc': 'Slice, filtraggio, sorted con lambda. Il preprocessing quotidiano di ogni data scientist.', 'l3-ex': '3 esercizi',
+    'l4-title': 'NumPy — calcolo numerico veloce', 'l4-desc': 'Array, operazioni vettorizzate, shape, reshape, prodotto matriciale. 100x più veloce di Python puro.', 'l4-ex': '3 esercizi',
+    'l5-title': 'Pandas — analisi di dataset reali', 'l5-desc': 'DataFrame, boolean indexing, NaN, feature engineering. Il foglio Excel programmabile.', 'l5-ex': '3 esercizi',
+    'l6-title': 'Algebra lineare', 'l6-desc': 'Vettori, matrici, prodotto scalare, cosine similarity. Il linguaggio con cui parlano le reti neurali.', 'l6-ex': '3 esercizi',
+    'l7-title': 'Calcolo e gradient descent', 'l7-desc': 'Derivate, pendenza, l\'algoritmo con cui le reti neurali imparano. Learning rate e convergenza.', 'l7-ex': '3 esercizi',
+    'l8-title': 'Probabilità e teorema di Bayes', 'l8-desc': 'Prior, posterior, distribuzione normale, softmax. Come i classificatori pensano in termini di probabilità.', 'l8-ex': '3 esercizi',
+    'l9-title': 'Statistica per ML', 'l9-desc': 'Overfitting, underfitting, cross-validation, precision, recall, F1. Come si valuta davvero un modello.', 'l9-ex': '3 esercizi',
+    // Social proof
+    'proof-eyebrow': 'Cosa dicono',
+    'proof-heading': 'I primi studenti',
+    'proof-sub': 'Aggiungi qui le testimonianze reali dopo le prime settimane di distribuzione. Chiedi feedback agli utenti via email o nei commenti LinkedIn.',
+    'proof1': '"Finalmente un corso AI in italiano che spiega il perché prima del come. Gli esercizi con feedback istantaneo cambiano tutto rispetto ai soliti video."',
+    'proof1-role': 'Sviluppatore backend — Milano',
+    'proof2': '"Il fatto che funzioni offline l\'ho usato in treno per una settimana intera. A fine mese avevo finito tutte e 9 le lezioni senza mai aprire YouTube."',
+    'proof2-role': 'Studente magistrale — Bologna',
+    'proof3': '"Gradient descent spiegato con l\'analogia della montagna nella nebbia — in 5 anni di corsi online non l\'avevo mai capito davvero fino a questa lezione."',
+    'proof3-role': 'Data analyst — Roma',
+    'proof-notice': '⚠️ Queste sono testimonianze placeholder. Sostituiscile con feedback reali entro 2 settimane dal lancio. Chiedi esplicitamente ai tuoi utenti via email o LinkedIn.',
+    // CTA
+    'cta-eyebrow': 'Inizia adesso',
+    'cta-title': 'Un file. Zero login.<br>Gratis per sempre.',
+    'cta-sub': 'Scarica la Fase 1 adesso, oppure iscriviti alla lista per ricevere la Fase 2 (ML classico con scikit-learn e XGBoost) con accesso early bird.',
+    'cta-start2': '▶ Inizia AI Pro — Lezione 1 gratis',
+    'cta-unlock': '🔓 Sblocca AI Pro completo — €29 early bird',
+    'cta-or': 'oppure',
+    'cta-phase2-btn': 'Fase 2 in early bird →',
+    'optin-success-2': '✓ Iscritto! Ti avviseremo per la Fase 2.',
+    'cta-legal': 'Nessuno spam · Cancellazione in un click · © 2026 Neuramente',
+    // Footer
+    'footer-desc': 'Percorso professionale in intelligenza artificiale in italiano',
+    'footer-legal': 'Uso personale · Vietata la redistribuzione',
+    // Email placeholders
+    'email-placeholder': 'la-tua-email@gmail.com',
+  },
+  en: {
+    // Meta
+    'meta-title': 'Neuramente · AI Pro — Learn AI the Professional Way',
+    'meta-desc': 'The professional AI learning path. From zero to ML in 9 lessons. Free. Works offline. No login required.',
+    // Nav
+    'nav-cta-text': 'Start for free →',
+    // Hero
+    'hero-title': 'Learn AI<br>the <em>professional</em><br>way, from zero.',
+    'hero-lead': '9 interactive lessons on Python, NumPy, Pandas, linear algebra, gradient descent, probability and ML statistics. A single HTML file that works offline, no login, free.',
+    'pill-free': '✓ Free',
+    'pill-offline': '✓ Offline',
+    'pill-lessons': '9 lessons',
+    'pill-exercises': '27 exercises',
+    'pill-cert': 'Certificate included',
+    'pill-nologin': 'No login',
+    'cta-start': '▶ Start AI Pro — Lesson 1 free',
+    'cta-or-sub': 'or subscribe to get Phase 2 when it launches',
+    'optin-btn-text': 'Notify me →',
+    'optin-sub-text': 'No spam. Just the Phase 2 launch notification. Unsubscribe in one click.',
+    'optin-success': '✓ Perfect! We\'ll notify you when Phase 2 launches with early bird access.',
+    // Mockup
+    'mockup-eyebrow': 'Lesson 3 · Linear Algebra',
+    'mockup-heading': 'Cosine Similarity —<br>how GPT understands words',
+    'mockup-para': 'In language models, every word is a vector. <span style="color:var(--accent)">Cosine similarity</span> measures how much two vectors point in the same direction...',
+    'mockup-stat-lessons': 'lessons',
+    'mockup-stat-exercises': 'exercises',
+    'mockup-stat-progress': 'progress',
+    // Features
+    'feat-eyebrow': 'Why it\'s different',
+    'feat-heading': 'Not a video. Not a PDF.<br>A learning environment.',
+    'feat-sub': 'Each lesson has navigable slides, exercises with instant feedback, quizzes and a fullscreen viewer. Progress is saved automatically.',
+    'feat1-title': 'Exercises with instant feedback',
+    'feat1-desc': '27 practical exercises that validate your code and explain what you got wrong — or why you got it right. No need to wait for a human grader.',
+    'feat2-title': 'Works offline',
+    'feat2-desc': 'A single 300KB HTML file. No server, no login, no internet connection required. Works on trains, planes, campus without wifi.',
+    'feat3-title': 'Downloadable certificate',
+    'feat3-desc': 'Upon completing Phase 1 you can generate and download your Neuramente AI Pro certificate in PDF format. With unique ID and LinkedIn share link.',
+    'feat4-title': 'Light and dark theme',
+    'feat4-desc': 'Study at night in dark mode, during the day in light mode. The theme is remembered between sessions.',
+    'feat5-title': 'Progress tracking',
+    'feat5-desc': 'The course remembers where you left off. On reopening it shows how many lessons you\'ve completed and takes you back to your last position.',
+    'feat6-title': 'Fullscreen slides',
+    'feat6-desc': 'Each lesson has a navigable slide viewer with fullscreen mode. Study like in a real classroom, with keyboard (←→) and visual navigation.',
+    // Curriculum
+    'curr-eyebrow': 'The curriculum',
+    'curr-heading': '9 lessons. 2 modules.<br>Zero prerequisites.',
+    'curr-sub': 'The same progression as Stanford CS229 and fast.ai, adapted for complete beginners. Every concept is explained with concrete analogies before showing the code.',
+    'mod1-label': 'MODULE 1 · PYTHON FOR ML',
+    'mod2-label': 'MODULE 2 · MATH FOR AI',
+    'l1-title': 'Variables and data types', 'l1-desc': 'How Python thinks about data. Variables, int, float, str, bool, lists, dictionaries.', 'l1-ex': '3 exercises',
+    'l2-title': 'Functions and loops', 'l2-desc': 'def, return, for, range, enumerate, list comprehension. The structure of training loops.', 'l2-ex': '3 exercises',
+    'l3-title': 'Advanced lists and dicts', 'l3-desc': 'Slicing, filtering, sorted with lambda. The everyday preprocessing of every data scientist.', 'l3-ex': '3 exercises',
+    'l4-title': 'NumPy — fast numerical computing', 'l4-desc': 'Arrays, vectorized operations, shape, reshape, matrix product. 100x faster than pure Python.', 'l4-ex': '3 exercises',
+    'l5-title': 'Pandas — real dataset analysis', 'l5-desc': 'DataFrame, boolean indexing, NaN, feature engineering. The programmable spreadsheet.', 'l5-ex': '3 exercises',
+    'l6-title': 'Linear algebra', 'l6-desc': 'Vectors, matrices, dot product, cosine similarity. The language neural networks speak.', 'l6-ex': '3 exercises',
+    'l7-title': 'Calculus and gradient descent', 'l7-desc': 'Derivatives, slope, the algorithm neural networks use to learn. Learning rate and convergence.', 'l7-ex': '3 exercises',
+    'l8-title': 'Probability and Bayes\' theorem', 'l8-desc': 'Prior, posterior, normal distribution, softmax. How classifiers think in terms of probability.', 'l8-ex': '3 exercises',
+    'l9-title': 'Statistics for ML', 'l9-desc': 'Overfitting, underfitting, cross-validation, precision, recall, F1. How to truly evaluate a model.', 'l9-ex': '3 exercises',
+    // Social proof
+    'proof-eyebrow': 'What they say',
+    'proof-heading': 'Early students',
+    'proof-sub': 'Add real testimonials here after the first weeks of distribution. Ask for feedback from users via email or LinkedIn comments.',
+    'proof1': '"Finally an AI course that explains the why before the how. Exercises with instant feedback change everything compared to regular videos."',
+    'proof1-role': 'Backend developer — Milan',
+    'proof2': '"The offline feature meant I studied on the train for an entire week. By month\'s end I\'d finished all 9 lessons without ever opening YouTube."',
+    'proof2-role': 'Master\'s student — Bologna',
+    'proof3': '"Gradient descent explained with the foggy mountain analogy — in 5 years of online courses I\'d never truly understood it until this lesson."',
+    'proof3-role': 'Data analyst — Rome',
+    'proof-notice': '⚠️ These are placeholder testimonials. Replace them with real feedback within 2 weeks of launch. Explicitly ask your users via email or LinkedIn.',
+    // CTA
+    'cta-eyebrow': 'Start now',
+    'cta-title': 'One file. Zero login.<br>Free forever.',
+    'cta-sub': 'Download Phase 1 now, or subscribe to get Phase 2 (classic ML with scikit-learn and XGBoost) with early bird access.',
+    'cta-start2': '▶ Start AI Pro — Lesson 1 free',
+    'cta-unlock': '🔓 Unlock full AI Pro — €29 early bird',
+    'cta-or': 'or',
+    'cta-phase2-btn': 'Phase 2 early bird →',
+    'optin-success-2': '✓ Subscribed! We\'ll notify you for Phase 2.',
+    'cta-legal': 'No spam · Unsubscribe in one click · © 2026 Neuramente',
+    // Footer
+    'footer-desc': 'Professional AI learning path',
+    'footer-legal': 'Personal use only · Redistribution prohibited',
+    // Email placeholders
+    'email-placeholder': 'your-email@gmail.com',
+  }
+};
+
+let currentLang = localStorage.getItem('neuramente_lang') || 'it';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('neuramente_lang', lang);
+
+  // Update toggle buttons
+  document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+  const t = translations[lang];
+
+  // Update html lang attribute
+  document.documentElement.lang = lang;
+
+  // Update meta tags
+  document.getElementById('meta-title').textContent = t['meta-title'];
+  document.title = t['meta-title'];
+  document.getElementById('meta-desc').setAttribute('content', t['meta-desc']);
+  document.getElementById('og-title').setAttribute('content', t['meta-title']);
+  document.getElementById('og-desc').setAttribute('content', t['meta-desc']);
+
+  // Update all translatable elements by ID
+  const htmlKeys = ['hero-title','hero-lead','feat-heading','curr-heading','cta-title',
+    'mockup-heading','mockup-para','feat-sub'];
+  const textKeys = Object.keys(t).filter(k => !htmlKeys.includes(k) && k !== 'email-placeholder' && k !== 'meta-title' && k !== 'meta-desc');
+
+  textKeys.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t[id];
+  });
+
+  htmlKeys.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = t[id];
+  });
+
+  // Update email placeholders
+  const p = t['email-placeholder'];
+  ['email-input','email-input-2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.placeholder = p;
+  });
 }
-const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://github.us8.list-manage.com/subscribe/post?u=a69b0fbb79c9ccf4f57ced666&id=c28fbf09fd&f_id=00ecb4e1f0';
-  form.target = '_blank';
-  const inp = document.createElement('input');
-  inp.type = 'hidden'; inp.name = 'EMAIL'; inp.value = email;
-  form.appendChild(inp);
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-  document.querySelector('.cta-form').style.display = 'none';
-  document.getElementById('optin-success-2').style.display = 'block';
+
+// ─── Opt-in form handler ─────────────────────────────────────────────────────
+function handleOptinSubmit(e, successId) {
+  // Let the form submit normally (POST to Mailchimp in new tab)
+  // then show success message
+  const form = e.target;
+  const successEl = document.getElementById(successId);
+  if (successEl) {
+    setTimeout(() => {
+      form.style.display = 'none';
+      successEl.style.display = 'block';
+    }, 500);
+  }
 }
-// ─── Smooth scro
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+setLang(currentLang);
+</script>
+</body>
+</html>
