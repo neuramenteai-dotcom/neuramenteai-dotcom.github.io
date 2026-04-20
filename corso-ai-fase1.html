@@ -3255,11 +3255,12 @@ let cur = 0;
 function renderSlide(i) {
   const tot = SLIDES.length;
   const s = SLIDES[i];
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
   document.getElementById('slide-area').innerHTML =
     `<div class="s-eyebrow">${s.eyebrow}</div>
      <div class="s-title">${s.title}</div>
      ${s.body}`;
-  document.getElementById('scnt').textContent = (typeof currentLang !== 'undefined' && currentLang === 'en') ? `Slide ${i+1} of ${tot}` : `Slide ${i+1} di ${tot}`;
+  document.getElementById('scnt').textContent = isEN ? `Slide ${i+1} of ${tot}` : `Slide ${i+1} di ${tot}`;
   document.getElementById('sp').disabled = i === 0;
   document.getElementById('sn').disabled = i === tot-1;
   document.querySelectorAll('.sdot').forEach((d,j) => {
@@ -3267,10 +3268,13 @@ function renderSlide(i) {
   });
   const pct = Math.round(((i+1)/tot)*100);
   document.getElementById('sv-ptext').textContent =
-    i === tot-1 ? 'Hai visto tutte le slide — ora fai gli esercizi!' :
-    `${pct}% completato`;
+    i === tot-1
+      ? (isEN ? 'All slides done — now do the exercises!' : 'Hai visto tutte le slide — ora fai gli esercizi!')
+      : (isEN ? `${pct}% complete` : `${pct}% completato`);
   document.getElementById('sv-hint').textContent =
-    i < tot-1 ? `Slide successiva: "${SLIDES[i+1].title.substring(0,40)}..."` : '';
+    i < tot-1
+      ? (isEN ? `Next: "${SLIDES[i+1].title.substring(0,40)}..."` : `Slide successiva: "${SLIDES[i+1].title.substring(0,40)}..."`)
+      : '';
 }
 
 function sNav(d) {
@@ -3303,26 +3307,40 @@ function sNav(d) {
 
 // ═══ FULLSCREEN ═══
 function fsRender() {
-  const s = SLIDES[cur];
-  document.getElementById('fs-slide-area').innerHTML =
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
+  const activeSLIDES = (window._SLIDES_LANG && window._SLIDES_LANG[1] && isEN) ? window._SLIDES_LANG[1] : SLIDES;
+  const s = activeSLIDES[cur] || SLIDES[cur];
+  const fsSlideArea = document.getElementById('fs-slide-area');
+  if (fsSlideArea) fsSlideArea.innerHTML =
     `<div class="s-eyebrow">${s.eyebrow}</div>
      <div class="s-title">${s.title}</div>
      ${s.body}`;
-  document.getElementById('fs-cnt').textContent = `Slide ${cur+1} di ${tot}`;
-  document.getElementById('fs-sp').disabled = cur === 0;
-  document.getElementById('fs-sn').disabled = cur === tot-1;
-  document.getElementById('fs-prev').disabled = cur === 0;
-  document.getElementById('fs-next').disabled = cur === tot-1;
-  document.getElementById('fs-next').textContent = cur === tot-1 ? '✓ Fine slide' : 'Successiva →';
+  const fsCnt = document.getElementById('fs-cnt');
+  if (fsCnt) fsCnt.textContent = isEN ? `Slide ${cur+1} of ${tot}` : `Slide ${cur+1} di ${tot}`;
+  const fsSp = document.getElementById('fs-sp'); if(fsSp) fsSp.disabled = cur === 0;
+  const fsSn = document.getElementById('fs-sn'); if(fsSn) fsSn.disabled = cur === tot-1;
+  const fsPrev = document.getElementById('fs-prev'); if(fsPrev) fsPrev.disabled = cur === 0;
+  const fsNext = document.getElementById('fs-next');
+  if (fsNext) {
+    fsNext.disabled = cur === tot-1;
+    fsNext.textContent = cur === tot-1
+      ? (isEN ? '✓ Done' : '✓ Fine slide')
+      : (isEN ? 'Next →' : 'Successiva →');
+  }
   document.querySelectorAll('#fs-dots .sdot').forEach((d,j) => {
     d.classList.toggle('active', j===cur);
   });
   const pct = Math.round(((cur+1)/tot)*100);
-  document.getElementById('fs-ptext').textContent =
-    cur === tot-1 ? 'Hai visto tutte le slide — chiudi e fai gli esercizi!' : `${pct}% completato`;
-  document.getElementById('fs-hint-text').textContent =
-    cur < tot-1 ? `"${SLIDES[cur+1].title.substring(0,40)}..."` : '';
-  document.getElementById('fs-body')||document.querySelector('.fs-body').scrollTo(0,0);
+  const fsPtext = document.getElementById('fs-ptext');
+  if (fsPtext) fsPtext.textContent =
+    cur === tot-1
+      ? (isEN ? 'All slides done — close and do the exercises!' : 'Hai visto tutte le slide — chiudi e fai gli esercizi!')
+      : (isEN ? `${pct}% complete` : `${pct}% completato`);
+  const fsHint = document.getElementById('fs-hint-text');
+  if (fsHint) fsHint.textContent =
+    cur < tot-1 ? `"${(activeSLIDES[cur+1]||SLIDES[cur+1]).title.substring(0,40)}..."` : '';
+  const fsBody = document.getElementById('fs-body') || document.querySelector('.fs-body');
+  if (fsBody) fsBody.scrollTo(0,0);
 }
 
 function openFullscreen() {
@@ -3366,6 +3384,22 @@ const TITLES = {
   l9:'Lezione 9 — Statistica per ML',
   cert:'Certificato Fase 1'
 };
+const TITLES_EN = {
+  intro:'Course Introduction',
+  l1:'Lesson 1 — Variables & Data Types',
+  l2:'Lesson 2 — Functions & Loops',
+  l3:'Lesson 3 — Advanced Lists & Dicts',
+  l4:'Lesson 4 — NumPy',
+  l5:'Lesson 5 — Pandas',
+  l6:'Lesson 6 — Linear Algebra',
+  l7:'Lesson 7 — Calculus & Gradient Descent',
+  l8:'Lesson 8 — Probability & Bayes',
+  l9:'Lesson 9 — ML Statistics',
+  cert:'Phase 1 Certificate'
+};
+function getTitle(id) {
+  try { return localStorage.getItem('neuramente_lang')==='en' ? (TITLES_EN[id]||TITLES[id]) : TITLES[id]; } catch(e) { return TITLES[id]; }
+}
 
 
 // ═══════════════════════════════════════════════════════
@@ -3822,8 +3856,9 @@ function renderLSlide(ln, i) {
   const tot = slides.length;
   const area = document.getElementById('slide-area'+ln);
   if (area) area.innerHTML = `<div class="s-eyebrow">${s.eyebrow}</div><div class="s-title">${s.title}</div>${s.body}`;
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
   const cnt = document.getElementById('scnt'+ln);
-  if (cnt) cnt.textContent = `Slide ${i+1} di ${tot}`;
+  if (cnt) cnt.textContent = isEN ? `Slide ${i+1} of ${tot}` : `Slide ${i+1} di ${tot}`;
   const sp = document.getElementById('sp'+ln);
   const sn = document.getElementById('sn'+ln);
   if (sp) sp.disabled = i===0;
@@ -3833,8 +3868,12 @@ function renderLSlide(ln, i) {
   const pct = Math.round(((i+1)/tot)*100);
   const pt = document.getElementById('sv-ptext'+ln);
   const ph = document.getElementById('sv-hint'+ln);
-  if (pt) pt.textContent = i===tot-1 ? 'Hai visto tutte le slide — ora fai gli esercizi!' : `${pct}% completato`;
-  if (ph) ph.textContent = i<tot-1 ? `Slide successiva: "${slides[i+1].title.substring(0,38)}..."` : '';
+  if (pt) pt.textContent = i===tot-1
+    ? (isEN ? 'All slides done — now do the exercises!' : 'Hai visto tutte le slide — ora fai gli esercizi!')
+    : (isEN ? `${pct}% complete` : `${pct}% completato`);
+  if (ph) ph.textContent = i<tot-1
+    ? (isEN ? `Next: "${slides[i+1].title.substring(0,38)}..."` : `Slide successiva: "${slides[i+1].title.substring(0,38)}…"`)
+    : '';
 }
 
 // Fullscreen multi-lezione
@@ -3848,23 +3887,37 @@ function openFsL(ln) {
   if (ov.requestFullscreen) ov.requestFullscreen().catch(()=>{});
 }
 function fsRenderL() {
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
   const ln = fsCurrentLesson;
-  const slides = ALL_SLIDES[ln] || SLIDES;
+  // Use EN slides when language is EN
+  const enSlides = window._SLIDES_LANG ? window._SLIDES_LANG[ln] : null;
+  const itSlides = ALL_SLIDES[ln] || SLIDES;
+  const slides = (isEN && enSlides) ? enSlides : itSlides;
   const i = (ln===1) ? cur : (lessonCur[ln]||0);
-  const s = slides[i];
+  const s = slides[i] || itSlides[i];
   const tot = slides.length;
-  document.getElementById('fs-slide-area').innerHTML = `<div class="s-eyebrow">${s.eyebrow}</div><div class="s-title">${s.title}</div>${s.body}`;
-  document.getElementById('fs-cnt').textContent = `Slide ${i+1} di ${tot}`;
-  document.getElementById('fs-sp').disabled = i===0;
-  document.getElementById('fs-sn').disabled = i===tot-1;
-  document.getElementById('fs-prev').disabled = i===0;
+  const fsArea = document.getElementById('fs-slide-area');
+  if (fsArea) fsArea.innerHTML = `<div class="s-eyebrow">${s.eyebrow}</div><div class="s-title">${s.title}</div>${s.body}`;
+  const fsCnt = document.getElementById('fs-cnt');
+  if (fsCnt) fsCnt.textContent = isEN ? `Slide ${i+1} of ${tot}` : `Slide ${i+1} di ${tot}`;
+  const fsSp = document.getElementById('fs-sp'); if(fsSp) fsSp.disabled = i===0;
+  const fsSn = document.getElementById('fs-sn'); if(fsSn) fsSn.disabled = i===tot-1;
+  const fsPrev = document.getElementById('fs-prev'); if(fsPrev) fsPrev.disabled = i===0;
   const nxt = document.getElementById('fs-next');
-  nxt.disabled = i===tot-1;
-  nxt.textContent = i===tot-1 ? '✓ Fine slide' : 'Successiva →';
+  if (nxt) {
+    nxt.disabled = i===tot-1;
+    nxt.textContent = i===tot-1
+      ? (isEN ? '✓ Done' : '✓ Fine slide')
+      : (isEN ? 'Next →' : 'Successiva →');
+  }
   document.querySelectorAll('#fs-dots .sdot').forEach((d,j)=>d.classList.toggle('active',j===i));
   const pct = Math.round(((i+1)/tot)*100);
-  document.getElementById('fs-ptext').textContent = i===tot-1 ? 'Tutte le slide viste — chiudi e fai gli esercizi!' : `${pct}% completato`;
-  document.getElementById('fs-hint-text').textContent = i<tot-1 ? `"${slides[i+1].title.substring(0,38)}..."` : '';
+  const fsPt = document.getElementById('fs-ptext');
+  if (fsPt) fsPt.textContent = i===tot-1
+    ? (isEN ? 'All slides done — close and do the exercises!' : 'Tutte le slide viste — chiudi e fai gli esercizi!')
+    : (isEN ? `${pct}% complete` : `${pct}% completato`);
+  const fsHint = document.getElementById('fs-hint-text');
+  if (fsHint) fsHint.textContent = i<tot-1 ? `"${(slides[i+1]||itSlides[i+1]).title.substring(0,38)}…"` : '';
   const fb = document.getElementById('fs-body');
   if (fb) fb.scrollTo(0,0);
 }
@@ -4292,14 +4345,36 @@ function checkReturningUser() {
   // Trova la lezione più recente
   const lessons = p.lessons || {};
   const lastId = Object.entries(lessons).sort((a,b) => b[1]-a[1])[0]?.[0];
-  const lessonNames = {l1:'Variabili e tipi',l2:'Funzioni e cicli',l3:'Liste avanzate',
-    l4:'NumPy',l5:'Pandas',l6:'Algebra lineare',l7:'Gradiente',l8:'Probabilità',l9:'Statistica ML'};
-  const lastName = lessonNames[lastId] || 'ultima lezione';
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
+  const lessonNames = isEN
+    ? {l1:'Variables & Types',l2:'Functions & Loops',l3:'Advanced Lists',
+       l4:'NumPy',l5:'Pandas',l6:'Linear Algebra',l7:'Gradient Descent',l8:'Probability',l9:'ML Statistics'}
+    : {l1:'Variabili e tipi',l2:'Funzioni e cicli',l3:'Liste avanzate',
+       l4:'NumPy',l5:'Pandas',l6:'Algebra lineare',l7:'Gradiente',l8:'Probabilit\u00e0',l9:'Statistica ML'};
+  const lastName = lessonNames[lastId] || (isEN ? 'last lesson' : 'ultima lezione');
 
   const overlay = document.createElement('div');
   overlay.id = 'welcome-back';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,12,18,0.82);backdrop-filter:blur(8px);z-index:9998;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease';
-  overlay.innerHTML = `
+  overlay.innerHTML = isEN ? `
+    <div style="background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:40px 48px;max-width:420px;width:90%;text-align:center;animation:fadeUp .35s ease">
+      <div style="font-size:32px;margin-bottom:12px">👋</div>
+      <div style="font-family:var(--serif);font-size:26px;color:var(--text);margin-bottom:8px">Welcome back${nome ? ', ' + nome : ''}!</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:24px">
+        You've completed <strong style="color:var(--text)">${lCount}/9 lessons</strong> and <strong style="color:var(--text)">${exCount} exercises</strong>.<br>
+        Last session: <em style="color:var(--accent)">${lastName}</em>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button onclick="document.getElementById('welcome-back').remove();${lastId ? "setTimeout(()=>go('" + lastId + "'),50);" : ''}" 
+          style="padding:10px 22px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">
+          Resume from ${lastName} →
+        </button>
+        <button onclick="document.getElementById('welcome-back').remove()" 
+          style="padding:10px 22px;background:transparent;color:var(--muted);border:1px solid var(--border2);border-radius:8px;font-size:14px;cursor:pointer;font-family:var(--sans)">
+          Start from the beginning
+        </button>
+      </div>
+    </div>` : `
     <div style="background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:40px 48px;max-width:420px;width:90%;text-align:center;animation:fadeUp .35s ease">
       <div style="font-size:32px;margin-bottom:12px">👋</div>
       <div style="font-family:var(--serif);font-size:26px;color:var(--text);margin-bottom:8px">Bentornato${nome ? ', ' + nome : ''}!</div>
@@ -4755,29 +4830,34 @@ function updatePaywalls() {
 
 // Inserimento chiave licenza
 function enterLicenseKey() {
-  const key = prompt('Inserisci la tua chiave licenza\n(formato: AIPRO-XXXX-XXXX-XXXX)', '');
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
+  const key = prompt(isEN
+    ? 'Enter your license key\n(format: AIPRO-XXXX-XXXX-XXXX)'
+    : 'Inserisci la tua chiave licenza\n(formato: AIPRO-XXXX-XXXX-XXXX)', '');
   if (!key) return;
   const clean = key.trim().toUpperCase();
   if (/^AIPRO-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(clean)) {
     try { localStorage.setItem(LICENSE_KEY, clean); } catch(e) {}
     updatePaywalls();
-    // Mostra conferma
     showUnlockCelebration();
   } else {
-    alert('Chiave non valida. Controlla il formato: AIPRO-XXXX-XXXX-XXXX\n\nSe hai acquistato il corso, la chiave si trova nella email di conferma Lemonsqueezy.');
+    alert(isEN
+      ? 'Invalid key. Check the format: AIPRO-XXXX-XXXX-XXXX\n\nIf you purchased the course, the key is in your Lemonsqueezy confirmation email.'
+      : 'Chiave non valida. Controlla il formato: AIPRO-XXXX-XXXX-XXXX\n\nSe hai acquistato il corso, la chiave si trova nella email di conferma Lemonsqueezy.');
   }
 }
 
 // Celebrazione sblocco
 function showUnlockCelebration() {
+  const isEN = (function(){ try{ return localStorage.getItem('neuramente_lang')==='en'; }catch(e){ return false; } })();
   const el = document.createElement('div');
   el.style.cssText = 'position:fixed;inset:0;background:rgba(10,12,18,.85);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease';
   el.innerHTML = `
     <div style="background:var(--card);border:1px solid rgba(62,207,142,.4);border-radius:16px;padding:40px 48px;max-width:400px;text-align:center">
       <div style="font-size:44px;margin-bottom:14px">🎉</div>
-      <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px">Corso sbloccato!</div>
-      <div style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:24px">Tutte le 9 lezioni di Neuramente AI Pro sono ora disponibili. Buono studio!</div>
-      <button onclick="this.closest('[style]').remove()" style="width:100%;padding:12px;background:var(--green);color:#051a0f;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">Inizia la Lezione 2 →</button>
+      <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px">${isEN ? 'Course unlocked!' : 'Corso sbloccato!'}</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:24px">${isEN ? 'All 9 lessons of Neuramente AI Pro are now available. Happy learning!' : 'Tutte le 9 lezioni di Neuramente AI Pro sono ora disponibili. Buono studio!'}</div>
+      <button onclick="this.closest('[style]').remove()" style="width:100%;padding:12px;background:var(--green);color:#051a0f;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">${isEN ? 'Start Lesson 2 →' : 'Inizia la Lezione 2 →'}</button>
     </div>`;
   document.body.appendChild(el);
   el.addEventListener('click', e => { if(e.target===el) el.remove(); });
