@@ -4244,17 +4244,17 @@ body{width:297mm;height:210mm;background:#0d1117;color:#dde3f0;font-family:'Inte
 
     // Titoli sidebar
     const TITLES_EN = {
+      intro:'Course introduction',
       l1:'Lesson 1 — Variables & Types', l2:'Lesson 2 — Functions & Loops',
       l3:'Lesson 3 — Advanced Lists',    l4:'Lesson 4 — NumPy',
       l5:'Lesson 5 — Pandas',            l6:'Lesson 6 — Linear Algebra',
       l7:'Lesson 7 — Gradient Descent',  l8:'Lesson 8 — Probability',
       l9:'Lesson 9 — ML Statistics',     cert:'Certificate'
     };
-    const TITLES_IT = window.TITLES || {};
+    const TITLES_IT = Object.assign({ intro:'Introduzione al corso' }, window.TITLES || {});
     const titleMap = targetLang === 'en' ? TITLES_EN : TITLES_IT;
     const topTitle = document.getElementById('top-title');
     if (topTitle) {
-      // Trova la pagina attiva
       const activePage = document.querySelector('.page.active');
       if (activePage) {
         const pageId = activePage.id.replace('page-','');
@@ -5163,17 +5163,17 @@ function generateDemoKey() {
 
     // Titoli sidebar
     const TITLES_EN = {
+      intro:'Course introduction',
       l1:'Lesson 1 — Variables & Types', l2:'Lesson 2 — Functions & Loops',
       l3:'Lesson 3 — Advanced Lists',    l4:'Lesson 4 — NumPy',
       l5:'Lesson 5 — Pandas',            l6:'Lesson 6 — Linear Algebra',
       l7:'Lesson 7 — Gradient Descent',  l8:'Lesson 8 — Probability',
       l9:'Lesson 9 — ML Statistics',     cert:'Certificate'
     };
-    const TITLES_IT = window.TITLES || {};
+    const TITLES_IT = Object.assign({ intro:'Introduzione al corso' }, window.TITLES || {});
     const titleMap = targetLang === 'en' ? TITLES_EN : TITLES_IT;
     const topTitle = document.getElementById('top-title');
     if (topTitle) {
-      // Trova la pagina attiva
       const activePage = document.querySelector('.page.active');
       if (activePage) {
         const pageId = activePage.id.replace('page-','');
